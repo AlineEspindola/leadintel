@@ -35,7 +35,13 @@ export interface CompanyResponseDTO {
   secondaryCNAEs: { code: number; description: string }[]
   score: number
   scoreTemperature: 'hot' | 'warm' | 'cold'
-  insights: InsightDTO[]
+  insights: InsightDTO[],
+  breakdown: {
+    isActive: number
+    companyAge: number
+    size: number
+    cnae: number
+  }
   raw?: any
 }
 
