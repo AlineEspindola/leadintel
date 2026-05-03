@@ -1,0 +1,42 @@
+# Dependências
+node_modules/
+
+# Build
+dist/
+build/
+.next/
+out/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Ambiente
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cache
+.cache/
+.parcel-cache/
+coverage/
+
+# Tailwind / PostCSS
+.postcss-cache/
+
+# Vite
+vite.config.ts.timestamp-*
