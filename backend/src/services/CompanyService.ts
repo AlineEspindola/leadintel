@@ -90,7 +90,7 @@ export class CompanyService implements ICompanyService {
 
     const INSIGHT_MAP: Array<[boolean, InsightDTO]> = [
       [isActive, { icon: '✅', title: 'Empresa ativa e regularizada', description: 'Situação regular na Receita Federal — sem impedimentos cadastrais.', confidence: 'high' }],
-      [!isActive, { icon: '⚠️', title: 'Empresa com situação irregular', description: 'Atenção: empresa encerrada ou com pendências na Receita Federal.', confidence: 'high' }],
+      [!isActive, { icon: '⚠️', title: 'Empresa com situação irregular', description: 'Atenção: empresa encerrada ou com pendências na Receita Federal.', confidence: 'medium' }],
       [ageYears < 2, { icon: '💡', title: 'Empresa recente', description: 'Menos de 2 anos de mercado — ciclo de decisão tende a ser mais rápido.', confidence: 'medium' }],
       [ageYears > 10, { icon: '🏛', title: 'Empresa consolidada', description: `${ageYears} anos de mercado — processo de compra mais estruturado.`, confidence: 'high' }],
       [porte === 'MEI' || porte === 'MICRO', { icon: '🎯', title: 'Decisor acessível', description: 'Equipe pequena, menos burocracia — contato direto com o decisor.', confidence: 'high' }],
