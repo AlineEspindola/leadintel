@@ -34,66 +34,59 @@ function MetaRow({
   );
 }
 
+function scoreLabel(value: number) {
+  if (value > 70) return { text: "Alto", color: "text-success-400" };
+  if (value > 40) return { text: "Médio", color: "text-yellow-400" };
+  return { text: "Baixo", color: "text-error-400" };
+}
+
 export function CompanyCard({ data, viewMode }: Props) {
   const breakdownItems = [
     {
-      label: "Status da empresa",
-      value: data.isActive ? "Ativa" : "Inativa",
-      type: "status",
-    },
-    {
       label: "Tempo de mercado",
       value: data.breakdown.companyAge,
-      type: "score",
-    },
-    {
-      label: "Porte",
-      value: data.breakdown.size,
-      type: "score",
     },
   ];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 animate-slide-up">
-      {/* Column 1 — Score */}
+
+      {/* SCORE */}
       <div className="bg-surface-raised border border-surface-border rounded-lg p-6 flex flex-col items-center">
         <ScoreIndicator
           score={data.score}
           temperature={data.scoreTemperature}
         />
+
         <div className="w-full border-t border-surface-border pt-4 mt-2 flex flex-col items-center gap-2">
           <Badge variant={data.isActive ? "success" : "error"}>
-            {data.isActive ? "✅ ATIVA" : "🚫 " + data.status}
+            {data.isActive ? "✅ ATIVA" : "🚫 INATIVA"}
           </Badge>
+
           <SegmentBadge segment={data.segment} />
         </div>
       </div>
 
-      {/* Column 2 — Company Info */}
+      {/* INFO */}
       <div className="bg-surface-raised border border-surface-border rounded-lg p-6 flex flex-col gap-4">
         <div>
           <h2 className="font-display text-xl text-neutral-100 leading-tight">
             {data.fantasyName || data.legalName}
           </h2>
+
           {data.fantasyName && data.fantasyName !== data.legalName && (
-            <p className="text-xs text-neutral-500 mt-0.5">{data.legalName}</p>
+            <p className="text-xs text-neutral-500 mt-0.5">
+              {data.legalName}
+            </p>
           )}
         </div>
 
         <div>
-          <MetaRow
-            icon="📍"
-            label="Localização"
-            value={`${data.city}, ${data.state}`}
-          />
+          <MetaRow icon="📍" label="Localização" value={`${data.city}, ${data.state}`} />
           <MetaRow icon="🏢" label="Porte" value={data.size} />
           <MetaRow icon="📅" label="Fundada" value={data.openedAt} />
           <MetaRow icon="📞" label="Telefone" value={data.phone || "—"} />
-          <MetaRow
-            icon="👤"
-            label="Sócio principal"
-            value={`${data.mainPartnerName} — ${data.mainPartnerRole}`}
-          />
+          <MetaRow icon="👤" label="Sócio principal" value={`${data.mainPartnerName} — ${data.mainPartnerRole}`} />
         </div>
 
         {viewMode !== "simple" && (
@@ -101,95 +94,44 @@ export function CompanyCard({ data, viewMode }: Props) {
             <p className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-2">
               Dados técnicos
             </p>
-            <MetaRow icon="🔢" label="CNPJ" value={data.cnpj} />
-            <MetaRow
-              icon="📋"
-              label="Natureza jurídica"
-              value={data.legalNature}
-            />
-            <MetaRow
-              icon="🗺"
-              label="Endereço"
-              value={`${data.address}, ${data.neighborhood}`}
-            />
-            <MetaRow icon="📮" label="CEP" value={data.zipCode} />
-          </div>
-        )}
 
-        {viewMode !== "simple" && data.secondaryCNAEs.length > 0 && (
-          <div className="border-t border-surface-border pt-4">
-            <p className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-2">
-              CNAEs secundários
-            </p>
-            <div className="flex flex-col gap-1">
-              {data.secondaryCNAEs.slice(0, 3).map((c) => (
-                <p key={c.code} className="text-xs text-neutral-400">
-                  <span className="font-mono text-neutral-500">{c.code}</span> —{" "}
-                  {c.description}
-                </p>
-              ))}
-            </div>
+            <MetaRow icon="🔢" label="CNPJ" value={data.cnpj} />
+            <MetaRow icon="📋" label="Natureza jurídica" value={data.legalNature} />
+            <MetaRow icon="🗺" label="Endereço" value={`${data.address}, ${data.neighborhood}`} />
+            <MetaRow icon="📮" label="CEP" value={data.zipCode} />
           </div>
         )}
       </div>
 
-      {/* Column 3 — Insights + Dev */}
+      {/* INSIGHTS + BREAKDOWN */}
       <div className="bg-surface-raised border border-surface-border rounded-lg p-6 flex flex-col gap-4">
         <InsightBlock insights={data.insights} />
-
-        {viewMode === "developer" && (
-          <div className="border-t border-surface-border pt-4">
-            <p className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-2">
-              Raw API Response
-            </p>
-            <pre className="text-xs font-mono text-neutral-400 bg-surface-ghost border border-surface-border rounded p-3 overflow-auto max-h-64">
-              {JSON.stringify(data.raw, null, 2)}
-            </pre>
-          </div>
-        )}
 
         {viewMode === "analytic" && (
           <div className="border-t border-surface-border pt-4">
             <p className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-2">
-              Score breakdown
+              Breakdown
             </p>
-            <div className="flex flex-col gap-2">
-              {breakdownItems.map((item) => (
-                <div
-                  key={item.label}
-                  className="flex items-center justify-between text-xs"
-                >
-                  <span className="text-neutral-400">{item.label}</span>
 
-                  {item.type === "status" ? (
-                    <span
-                      className={
-                        item.value === "Ativa"
-                          ? "text-success-400"
-                          : "text-error-400"
-                      }
-                    >
-                      {item.value}
+            <div className="flex flex-col gap-2">
+              {breakdownItems.map((item) => {
+                const formatted = scoreLabel(item.value);
+
+                return (
+                  <div
+                    key={item.label}
+                    className="flex items-center justify-between text-xs"
+                  >
+                    <span className="text-neutral-400">
+                      {item.label}
                     </span>
-                  ) : (
-                    <span
-                      className={
-                        Number(item.value) > 70
-                          ? "text-success-400"
-                          : Number(item.value) > 40
-                            ? "text-yellow-400"
-                            : "text-error-400"
-                      }
-                    >
-                      {Number(item.value) > 70
-                        ? "Alto"
-                        : Number(item.value) > 40
-                          ? "Médio"
-                          : "Baixo"}
+
+                    <span className={formatted.color}>
+                      {formatted.text}
                     </span>
-                  )}
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}

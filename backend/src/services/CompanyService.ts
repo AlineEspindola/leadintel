@@ -121,15 +121,15 @@ export class CompanyService implements ICompanyService {
   }
 
   private mapSizeLabel(sizeKey: string): string {
+    const key = (sizeKey || "").toUpperCase().trim();
+
     const map: Record<string, string> = {
-      MEI: "MEI",
-      MICRO: "Micro empresa",
-      PEQUENA: "Pequena empresa",
-      MEDIA: "Média empresa",
-      GRANDE: "Grande empresa",
+      "MICRO EMPRESA": "Microempresa",
+      "EMPRESA DE PEQUENO PORTE": "Pequena empresa",
+      "DEMAIS": "Média/Grande empresa",
     };
 
-    return map[sizeKey] ?? "Não informado";
+    return map[key] ?? "Não informado";
   }
 
   private calculateScore(company: BrasilAPICompany, raw: any): number {
