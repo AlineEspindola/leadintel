@@ -34,11 +34,32 @@ function normalize(str?: string) {
 }
 
 /**
- * DOMÍNIO MUITO CURTO → suspeito (a.com, x.com)
+ * DOMÍNIO MUITO CURTO → suspeito (a.com)
  */
 function isLowQualityDomain(domain: string): boolean {
   const name = domain.split(".")[0];
   return name.length <= 2;
+}
+
+/**
+ * DOMÍNIO ESTRANHO → provável fake
+ */
+function isWeirdDomain(domain: string): boolean {
+  const name = domain.split(".")[0];
+
+  // muito longo
+  if (domain.length > 30) return true;
+
+  // sem vogais (zxqwr)
+  if (!/[aeiou]/.test(name)) return true;
+
+  // muitos níveis (abc.xyz.qwe)
+  if (domain.split(".").length > 3) return true;
+
+  // muitos caracteres repetidos estranhos
+  if (/([a-z])\1{3,}/.test(name)) return true;
+
+  return false;
 }
 
 /**
@@ -53,6 +74,9 @@ function containsNameInEmail(name?: string, email?: string): boolean {
   return parts.some((p) => local.includes(p));
 }
 
+/**
+ * EMAIL VALIDATION
+ */
 export function validateEmail(email?: string): {
   valid: boolean;
   score: number;
@@ -72,17 +96,21 @@ export function validateEmail(email?: string): {
   const domain = normalized.split("@")[1];
 
   if (INVALID_EMAIL_DOMAINS.includes(domain)) {
-    return { valid: false, score: 10, provider: "invalid" };
+    return { valid: false, score: 5, provider: "invalid" };
   }
 
   if (isLowQualityDomain(domain)) {
-    return { valid: true, score: 30, provider: "suspicious" };
+    return { valid: true, score: 25, provider: "suspicious" };
+  }
+
+  if (isWeirdDomain(domain)) {
+    return { valid: true, score: 20, provider: "suspicious" };
   }
 
   const isGeneric = GENERIC_EMAIL_PROVIDERS.includes(domain);
 
   if (isGeneric) {
-    return { valid: true, score: 60, provider: "generic" };
+    return { valid: true, score: 70, provider: "generic" };
   }
 
   return { valid: true, score: 100, provider: "corporate" };
@@ -120,6 +148,9 @@ export function validatePhone(phone?: string): {
   };
 }
 
+/**
+ * NAME VALIDATION
+ */
 export function validateName(name?: string): {
   valid: boolean;
   score: number;
@@ -139,8 +170,7 @@ export function validateName(name?: string): {
     return { valid: false, score: 20, quality: "invalid" };
   }
 
-  const hasNumbers = /\d/.test(normalized);
-  if (hasNumbers) {
+  if (/\d/.test(normalized)) {
     return { valid: false, score: 20, quality: "invalid" };
   }
 
@@ -150,13 +180,12 @@ export function validateName(name?: string): {
     return { valid: true, score: 60, quality: "weak" };
   }
 
-  if (words.length >= 2) {
-    return { valid: true, score: 100, quality: "good" };
-  }
-
-  return { valid: true, score: 70, quality: "weak" };
+  return { valid: true, score: 100, quality: "good" };
 }
 
+/**
+ * FULL CONTACT SCORE
+ */
 export function validateContact(input: {
   name?: string;
   email?: string;
@@ -177,19 +206,28 @@ export function validateContact(input: {
     name.score * 0.2;
 
   /**
-   * bônus de coerência (nome dentro do email)
+   * bônus de coerência
    */
   if (containsNameInEmail(input.name, input.email)) {
     score += 10;
-  } else {
-    score -= 10; // penaliza mismatch
   }
 
   /**
-   * bônus leve se tem email + telefone válidos
+   * bônus se contato completo
    */
   if (email.valid && phone.valid) {
     score += 5;
+  }
+
+  /**
+   * penalizações INTELIGENTES (não agressivas)
+   */
+  if (email.provider === "suspicious") {
+    score -= 20;
+  }
+
+  if (!email.valid && !phone.valid) {
+    score -= 30;
   }
 
   score = Math.max(0, Math.min(100, score));
