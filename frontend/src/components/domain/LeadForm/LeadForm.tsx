@@ -28,10 +28,15 @@ export function LeadForm({ onSubmit, loading }: Props) {
 
   const validate = (): boolean => {
     const e: Partial<FormData> = {};
-    if (!form.name.trim()) e.name = "Nome é obrigatório";
-    if (!form.email.includes("@")) e.email = "Email inválido";
-    if (!form.cnpj || form.cnpj.replace(/\D/g, "").length !== 14)
-      e.cnpj = "CNPJ incompleto";
+
+    if (!form.cnpj || form.cnpj.replace(/\D/g, "").length !== 14) {
+      e.cnpj = "CNPJ inválido ou incompleto";
+    }
+
+    if (form.email && !form.email.includes("@")) {
+      e.email = "Email inválido";
+    }
+
     setErrors(e);
     return Object.keys(e).length === 0;
   };
