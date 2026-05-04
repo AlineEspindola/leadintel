@@ -1,4 +1,5 @@
 # LeadIntel — Enriquecimento de Leads B2B
+<img width="1347" height="640" alt="image" src="https://github.com/user-attachments/assets/7009e7b3-3cdf-41e5-ad1d-7d3f93aca188" />
 
 > Plataforma que transforma dados de CNPJ em insights comerciais acionáveis.
 
@@ -38,6 +39,8 @@ O LeadIntel resolve um problema real de equipes comerciais: receber um lead com 
 
 O projeto foi estruturado como se fosse um produto real, com cliente e usuário reais — partindo de UX, passando por UI, implementação e análise crítica.
 
+<img width="1165" height="462" alt="roadmap_base" src="https://github.com/user-attachments/assets/2e5e4e60-2aad-4fde-b5ca-20d1f1ec9c57" />
+
 ```
 LeadIntel
 ├── Contexto: Estruturar projeto como produto real
@@ -68,6 +71,7 @@ O resultado foram três personas distintas, cada uma representando um segmento r
 ---
 
 ### Persona 1 — Lucas Andrade (SDR)
+<img width="1536" height="1024" alt="persona1" src="https://github.com/user-attachments/assets/8829eba8-d0e9-4298-bf67-517bc6deaf0d" />
 
 **24 anos · SDR (Pré-vendas) · SaaS B2B · Iniciante/Intermediário · São Paulo - SP**
 
@@ -82,6 +86,7 @@ Lucas trabalha com metas diárias agressivas de contatos. Precisa qualificar lea
 ---
 
 ### Persona 2 — Fernanda Ribeiro (Head de Vendas)
+<img width="1536" height="1024" alt="persona2" src="https://github.com/user-attachments/assets/8b181d13-89be-455d-a99d-4771f746722c" />
 
 **36 anos · Head de Vendas · SaaS B2B · Avançado · São Paulo - SP**
 
@@ -96,6 +101,7 @@ Fernanda gerencia time de SDRs e Closers, define o ICP e acompanha métricas do 
 ---
 
 ### Persona 3 — Rafael Costa (Founder / Growth Hacker)
+<img width="1536" height="1024" alt="persona3" src="https://github.com/user-attachments/assets/3665afb1-84eb-4c8e-83a6-52053e1560b6" />
 
 **29 anos · Fundador & Growth · Startup Early Stage · Intermediário/Avançado · Belo Horizonte - MG**
 
