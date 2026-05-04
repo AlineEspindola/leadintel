@@ -1,4 +1,4 @@
-import { ViewMode } from "../../hooks/useViewMode";
+import { ViewMode } from "../../../hooks/useViewMode";
 
 interface Props {
   viewMode: ViewMode;

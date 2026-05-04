@@ -144,6 +144,43 @@ export function CompanyCard({ data, viewMode }: Props) {
             </div>
           </div>
         )}
+
+        {viewMode === "developer" && (
+  <div className="border-t border-surface-border pt-4">
+    <p className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-2">
+      Debug (Developer Mode)
+    </p>
+
+    <div className="flex flex-col gap-2 text-xs text-neutral-400">
+      <div>
+        <span className="text-neutral-500">Score:</span> {data.score}
+      </div>
+
+      <div>
+        <span className="text-neutral-500">Temperature:</span>{" "}
+        {data.scoreTemperature}
+      </div>
+
+      <div>
+        <span className="text-neutral-500">Status:</span>{" "}
+        {data.status}
+      </div>
+
+      <div>
+        <span className="text-neutral-500">CNAE:</span> {data.cnaeCode}
+      </div>
+
+      <div>
+        <span className="text-neutral-500">Raw keys:</span>{" "}
+        {Object.keys(data.raw || {}).length}
+      </div>
+    </div>
+
+    <pre className="mt-3 text-xs font-mono text-neutral-400 bg-surface-ghost border border-surface-border rounded p-3 overflow-auto max-h-64">
+      {JSON.stringify(data, null, 2)}
+    </pre>
+  </div>
+)}
       </div>
     </div>
   );
