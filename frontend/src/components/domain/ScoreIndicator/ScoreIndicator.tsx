@@ -83,7 +83,7 @@ export function ScoreIndicator({ score, temperature }: Props) {
           style={{ width: `${score}%` }}
         />
       </div>
-      <p className="text-xs text-neutral-500">Score de prioridade do lead</p>
+      <p className="text-xs text-neutral-500">Score de prioridade do lead da empresa</p>
     </div>
   );
 }
