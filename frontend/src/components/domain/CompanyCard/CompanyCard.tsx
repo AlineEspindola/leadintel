@@ -35,8 +35,8 @@ function MetaRow({
 }
 
 function scoreLabel(value: number) {
-  if (value > 70) return { text: "Alto", color: "text-success-400" };
-  if (value > 40) return { text: "Médio", color: "text-yellow-400" };
+  if (value >= 85) return { text: "Alto", color: "text-success-400" };
+  if (value >= 60) return { text: "Médio", color: "text-yellow-400" };
   return { text: "Baixo", color: "text-error-400" };
 }
 
@@ -46,6 +46,10 @@ export function CompanyCard({ data, viewMode }: Props) {
       label: "Tempo de mercado",
       value: data.breakdown.companyAge,
     },
+    {
+      label: "Qualidade do contato",
+      value: data.breakdown.contact
+    }
   ];
 
   return (

@@ -9,6 +9,9 @@ import {
   InsightDTO,
 } from "../../../shared/types/dto";
 import {
+  validateContact,
+} from "../../../shared/types/utils/contactValidator";
+import {
   BrasilAPICompany,
   ScoredCompany,
 } from "../../../shared/types/domain/company";
@@ -80,6 +83,14 @@ export class CompanyService implements ICompanyService {
 
     const temperature = new TemperatureScore(new DefaultScore(score));
 
+    const contactValidation = validateContact({
+      name: dto.name,
+      email: dto.email,
+      phone: dto.phone,
+    });
+
+    const contactScore = contactValidation.score;
+
     return {
       cnpj: company.getCNPJ().getValue(),
       legalName: company.getLegalName().getValue(),
@@ -111,6 +122,7 @@ export class CompanyService implements ICompanyService {
 
       breakdown: {
         isActive: isActive ? 100 : 0,
+        contact: contactScore,
         companyAge: ageScore,
         size: sizeScore,
         cnae: cnaeScore,

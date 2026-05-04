@@ -38,6 +38,7 @@ export interface CompanyResponseDTO {
   insights: InsightDTO[];
   breakdown: {
     isActive: number;
+    contact: number;
     companyAge: number;
     size: number;
     cnae: number;
