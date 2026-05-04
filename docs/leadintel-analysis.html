@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeadIntel — Análise Técnica & Roadmap SaaS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0e0e10;
+    --surface: #16161a;
+    --surface2: #1e1e24;
+    --border: #2a2a32;
+    --text: #e8e8f0;
+    --muted: #666680;
+    --accent: #6c63ff;
+    --accent2: #00d4aa;
+    --warn: #f5a623;
+    --danger: #e85555;
+    --success: #00d4aa;
+    --info: #4fc3f7;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 0 0 80px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 48px 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+  }
+  header .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  nav {
+    display: flex;
+    gap: 6px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  nav button {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .15s;
+    text-transform: uppercase;
+  }
+  nav button:hover { border-color: var(--accent); color: var(--accent); }
+  nav button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 48px 48px 0; }
+
+  section { display: none; }
+  section.active { display: block; }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: -0.3px;
+  }
+  h3 {
+    font-size: 14px;
+    font-family: var(--mono);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 32px 0 16px;
+  }
+  p { color: #b0b0c8; margin-bottom: 12px; }
+
+  /* ── SCORE BADGE ── */
+  .score-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+  }
+  .score-num {
+    font-family: var(--mono);
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--accent);
+  }
+  .score-label { font-size: 13px; color: var(--muted); }
+  .score-label strong { display: block; color: var(--text); font-size: 18px; font-weight: 500; }
+  .stars { color: var(--warn); font-size: 18px; letter-spacing: 2px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card p { font-size: 13px; margin-bottom: 6px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── TAG ── */
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .tag-bug { background: #3a1515; color: var(--danger); border: 1px solid #5a2020; }
+  .tag-smell { background: #3a2e10; color: var(--warn); border: 1px solid #5a4515; }
+  .tag-pattern { background: #1a2a3a; color: var(--info); border: 1px solid #1e4060; }
+  .tag-good { background: #0a2a20; color: var(--success); border: 1px solid #0e4030; }
+  .tag-risk { background: #3a1515; color: #ff8888; border: 1px solid #5a2020; }
+
+  /* ── TWO COLUMNS ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* ── TABLE ── */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0 24px; }
+  th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: #b0b0c8; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { color: var(--text); font-weight: 500; width: 220px; }
+
+  /* ── CODE BLOCK ── */
+  pre {
+    background: #0a0a10;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-x: auto;
+    color: #c8c8e8;
+    margin: 12px 0;
+  }
+  .kw { color: var(--accent); }
+  .str { color: var(--accent2); }
+  .cmt { color: var(--muted); }
+  .num { color: var(--warn); }
+
+  /* ── PROGRESS BAR ── */
+  .bar-row { margin-bottom: 12px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+  .bar-label span { color: var(--muted); font-family: var(--mono); font-size: 12px; }
+  .bar-bg { background: var(--surface2); border-radius: 3px; height: 6px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 3px; transition: width .6s ease; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 1px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 24px; }
+  .tl-dot {
+    position: absolute;
+    left: -24px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+  }
+  .tl-dot.short { background: var(--success); }
+  .tl-dot.mid { background: var(--warn); }
+  .tl-dot.long { background: var(--accent); }
+  .tl-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .tl-label.short { color: var(--success); }
+  .tl-label.mid { color: var(--warn); }
+  .tl-label.long { color: var(--accent); }
+  .tl-title { font-weight: 500; font-size: 14px; margin-bottom: 4px; }
+  .tl-desc { font-size: 13px; color: var(--muted); }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight {
+    border-left: 3px solid var(--accent);
+    background: var(--surface2);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 16px 0;
+    font-size: 13px;
+    color: #c0c0d8;
+  }
+
+  /* ── DIVIDER ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  /* ── SAAS PLAN CARDS ── */
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+  .plan {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .plan.featured { border-color: var(--accent); }
+  .plan-name { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .plan-price { font-family: var(--mono); font-size: 22px; color: var(--accent); margin-bottom: 12px; }
+  .plan-price span { font-size: 13px; color: var(--muted); }
+  .plan-feat { font-size: 12px; color: #9898b8; margin-bottom: 6px; padding-left: 14px; position: relative; }
+  .plan-feat::before { content: '→'; position: absolute; left: 0; color: var(--accent2); }
+
+  /* ── ARCH SECTION ── */
+  .arch-layer {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .arch-icon { font-size: 20px; width: 28px; flex-shrink: 0; }
+  .arch-name { font-weight: 500; font-size: 14px; }
+  .arch-desc { font-size: 12px; color: var(--muted); }
+  .arch-arrow { text-align: center; color: var(--border); font-size: 18px; margin: 2px 0; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    header { padding: 24px 20px 20px; }
+    .container { padding: 32px 20px 0; }
+    .grid2 { grid-template-columns: 1fr; }
+    .plans { grid-template-columns: 1fr; }
+    .score-num { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Análise Técnica Completa</div>
+  <h1>LeadIntel — Code Review & SaaS Roadmap</h1>
+  <p>Revisão sênior de código · Arquitetura · Produto · Engenharia</p>
+  <nav>
+    <button class="active" onclick="show('overview', this)">Visão Geral</button>
+    <button onclick="show('bugs', this)">Bugs & Riscos</button>
+    <button onclick="show('arch', this)">Arquitetura</button>
+    <button onclick="show('frontend', this)">Frontend</button>
+    <button onclick="show('backend', this)">Backend</button>
+    <button onclick="show('saas', this)">SaaS & Produto</button>
+    <button onclick="show('roadmap', this)">Roadmap</button>
+  </nav>
+</header>
+
+<!-- ══════════════════════════════════════ OVERVIEW ══════════════════════════════════════ -->
+<section id="overview" class="active">
+<div class="container">
+
+  <div class="score-bar">
+    <div class="score-num">7.4</div>
+    <div>
+      <div class="stars">★★★★☆</div>
+      <div class="score-label">
+        <strong>Acima da média para um teste técnico</strong>
+        Código bem estruturado com padrões avançados — mas com gaps críticos antes de ir para produção
+      </div>
+    </div>
+  </div>
+
+  <h3>Avaliação por dimensão</h3>
+
+  <div class="bar-row">
+    <div class="bar-label">Domínio & Design Patterns <span>9/10</span></div>
+    <div class="bar-bg"><div class="bar-fill" style="width:90%;background:#6c63ff"></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">TypeScript & Tipagem <span>6.5/10</span></div>
+    <div class="bar-bg"><div class="bar-fill" style="width:65%;background:#f5a623"></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Tratamento de Erros <span>7/10</span></div>
+    <div class="bar-bg"><div class="bar-fill" style="width:70%;background:#6c63ff"></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Testabilidade <span>3/10</span></div>
+    <div class="bar-bg"><div class="bar-fill" style="width:30%;background:#e85555"></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Segurança <span>4/10</span></div>
+    <div class="bar-bg"><div class="bar-fill" style="width:40%;background:#e85555"></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">UX / Frontend <span>8/10</span></div>
+    <div class="bar-bg"><div class="bar-fill" style="width:80%;background:#00d4aa"></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Escalabilidade <span>5/10</span></div>
+    <div class="bar-bg"><div class="bar-fill" style="width:50%;background:#f5a623"></div></div>
+  </div>
+  <div class="bar-row">
+    <div class="bar-label">Organização de Código <span>8.5/10</span></div>
+    <div class="bar-bg"><div class="bar-fill" style="width:85%;background:#00d4aa"></div></div>
+  </div>
+
+  <h3>O que se destaca positivamente</h3>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title"><span>🏗</span> Decorator Pattern no Domínio</div>
+      <p>O uso de <code>BrasilAPICompany</code> wrappando <code>DefaultCompany</code> com decorators como <code>FormattedCNPJ</code>, <code>TranslatedCNAE</code> e <code>HumanReadableDate</code> é textbook Clean Architecture — raro em testes técnicos deste nível.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>📐</span> Specification Pattern</div>
+      <p><code>ActiveCompanySpecification</code>, <code>StateSpecification</code>, etc. com composição via <code>.and()/.or()/.not()</code> demonstra domínio sólido de DDD. Praticamente nenhum candidato chega nesse nível.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>🧠</span> Shared Types Monorepo</div>
+      <p>A pasta <code>shared/types</code> separando DTOs, domain objects e validators é uma decisão arquitetural madura. Permite isomorfismo entre frontend e backend sem duplicação.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>🎯</span> State Machine no Frontend</div>
+      <p><code>SearchState</code> como union type (<code>"idle" | "loading" | "success" | "error_inactive"</code>...) é uma máquina de estados limpa. Evita o clássico anti-pattern de múltiplos booleans (<code>isLoading + isError + isSuccess</code>).</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>✅</span> Validação de Contato Rica</div>
+      <p><code>contactValidator.ts</code> com detecção de domínio suspeito, email corporativo vs genérico, verificação de coerência nome-email — nível produto real, não exercício acadêmico.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>🎨</span> UX Bem Pensada</div>
+      <p>CNPJInput com estados visuais, animação de score, ScoreIndicator com <code>requestAnimationFrame</code>, SkeletonLoader, InsightBlock com delay de animação — atenção rara a detalhes de interação.</p>
+    </div>
+  </div>
+
+  <h3>Resumo executivo dos problemas</h3>
+
+  <table>
+    <thead><tr><th>Categoria</th><th>Problema</th><th>Severidade</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Bug Crítico</td>
+        <td><code>calculateScore()</code> duplicado em <code>CompanyService</code> — método morto, nunca chamado</td>
+        <td><span class="tag tag-bug">Bug</span></td>
+      </tr>
+      <tr>
+        <td>Bug Crítico</td>
+        <td>Delay artificial de 800ms hardcoded no repository para "simular throttling"</td>
+        <td><span class="tag tag-bug">Bug</span></td>
+      </tr>
+      <tr>
+        <td>Segurança</td>
+        <td>Objeto <code>raw</code> exposto na resposta HTTP — vaza dados internos da API</td>
+        <td><span class="tag tag-risk">Risco</span></td>
+      </tr>
+      <tr>
+        <td>TypeScript</td>
+        <td><code>raw: any</code> em 4 arquivos críticos — anula benefícios do TS</td>
+        <td><span class="tag tag-smell">Smell</span></td>
+      </tr>
+      <tr>
+        <td>Arquitetura</td>
+        <td>Lógica de score duplicada — <code>calculateScore</code> e lógica inline em <code>enrich()</code></td>
+        <td><span class="tag tag-smell">Smell</span></td>
+      </tr>
+      <tr>
+        <td>Escalabilidade</td>
+        <td>Sem cache — cada request faz uma call externa. 100 usuários = 100 chamadas BrasilAPI</td>
+        <td><span class="tag tag-risk">Risco</span></td>
+      </tr>
+      <tr>
+        <td>Testabilidade</td>
+        <td>Zero testes — nenhum unit, integration ou e2e test</td>
+        <td><span class="tag tag-risk">Risco</span></td>
+      </tr>
+      <tr>
+        <td>Frontend</td>
+        <td><code>breakdown</code> exibe apenas 2 de 5 métricas disponíveis (companyAge + contact)</td>
+        <td><span class="tag tag-smell">Smell</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ BUGS ══════════════════════════════════════ -->
+<section id="bugs">
+<div class="container">
+
+  <h2>Bugs & Riscos Identificados</h2>
+  <p>Análise linha a linha. 3 bugs confirmados, 4 riscos de produção, 5 code smells prioritários.</p>
+
+  <h3>🔴 Bugs Confirmados</h3>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-bug">Bug #1</span> Método calculateScore() nunca é chamado</div>
+    <p>Em <code>CompanyService.ts</code> existe um método <code>private calculateScore()</code> que refaz todo o cálculo de score — mas o método <code>enrich()</code> não o chama. O score é calculado inline diretamente no corpo de <code>enrich()</code>. O método está morto e duplicado.</p>
+    <pre><span class="cmt">// enrich() — calcula score inline (correto, é esse que roda)</span>
+<span class="kw">const</span> weighted = <span class="kw">new</span> WeightedLeadScore({...});
+<span class="kw">const</span> score = weighted.getValue(); <span class="cmt">// ← usado aqui</span>
+
+<span class="cmt">// calculateScore() — duplicado, nunca chamado, tem fallback diferente (55 vs 50)</span>
+<span class="kw">private</span> calculateScore(company, raw): number {
+  <span class="kw">const</span> sizeScore = SIZE_SCORES[sizeKey] ?? <span class="num">55</span>; <span class="cmt">// ← fallback diferente do método ativo (50)!</span>
+  ...
+}</pre>
+    <p><strong>Fix:</strong> Extrair a lógica de score para um <code>ScoreCalculator</code> standalone e chamar de um único lugar.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-bug">Bug #2</span> Delay artificial de 800ms hardcoded</div>
+    <p>Em <code>BrasilAPIRepository.ts</code>:</p>
+    <pre><span class="kw">await</span> <span class="kw">new</span> Promise((r) => setTimeout(r, <span class="num">800</span>)); <span class="cmt">// ← isso não deveria existir em produção</span></pre>
+    <p>Claramente inserido para "simular throttling" ou "parecer mais realista" durante desenvolvimento. Em produção, isso adiciona 800ms a <em>todas</em> as requisições, sem necessidade. Com um cache de Redis, a penalidade seria ainda mais perceptível nos hits.</p>
+    <p><strong>Fix:</strong> Remover. Se rate limiting for necessário, implementar com um padrão correto (token bucket, semaphore).</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-bug">Bug #3</span> SIZE_SCORES com chaves inconsistentes</div>
+    <p>O mapa <code>SIZE_SCORES</code> em <code>scoreWeights.ts</code> define as chaves <code>"MEI"</code>, <code>"MICRO"</code>, <code>"DEMAIS"</code>, <code>"PEQUENA"</code>, <code>"MEDIO"</code>, <code>"GRANDE"</code>. Porém a BrasilAPI retorna valores como <code>"MICRO EMPRESA"</code> e <code>"EMPRESA DE PEQUENO PORTE"</code>.</p>
+    <pre><span class="cmt">// scoreWeights.ts</span>
+<span class="kw">const</span> SIZE_SCORES = { MICRO: <span class="num">75</span>, PEQUENA: <span class="num">80</span> ... };
+
+<span class="cmt">// CompanyService.ts</span>
+<span class="kw">const</span> sizeKey = (raw.porte || <span class="str">""</span>).toUpperCase(); <span class="cmt">// "MICRO EMPRESA" — não faz match</span>
+<span class="kw">const</span> sizeScore = SIZE_SCORES[sizeKey] ?? <span class="num">50</span>; <span class="cmt">// cai no fallback 50 para quase todos</span></pre>
+    <p>Ao mesmo tempo, <code>mapSizeLabel()</code> em <code>CompanyService</code> usa as chaves corretas (<code>"MICRO EMPRESA"</code>), mas o score usa as chaves erradas. Resultado: a vasta maioria das empresas recebe score de porte = 50 silenciosamente.</p>
+    <p><strong>Fix:</strong> Normalizar <code>sizeKey</code> para fazer match ou unificar o mapeamento numa única estrutura.</p>
+  </div>
+
+  <h3>🟡 Riscos de Produção</h3>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-risk">Risco #1</span> Campo raw exposto na resposta</div>
+    <p>O DTO <code>CompanyResponseDTO</code> inclui <code>raw?: any</code>, e o service faz <code>return { ..., raw }</code>. Isso vaza para o frontend <em>todos</em> os dados brutos da BrasilAPI, incluindo informações que talvez não devessem ser públicas. Em modo "developer" o frontend exibe um <code>JSON.stringify(data)</code> completo incluindo o raw.</p>
+    <p><strong>Fix:</strong> Remover <code>raw</code> do DTO e do retorno do service em produção. Se necessário para debug, criar um endpoint separado autenticado.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-risk">Risco #2</span> Ausência total de rate limiting</div>
+    <p>Qualquer requisição para <code>POST /api/company/enrich</code> dispara uma chamada para a BrasilAPI. Sem autenticação e sem rate limiting no backend, o endpoint está aberto para:</p>
+    <p>1) Abuso via automação (scraping em massa usando o serviço como proxy)<br>
+    2) Atingir limites da BrasilAPI e derrubar o serviço para todos os usuários<br>
+    3) Custo operacional crescente não controlado</p>
+    <p><strong>Fix:</strong> Implementar rate limiting por IP (<code>express-rate-limit</code>) e, em SaaS, por usuário autenticado. Adicionar cache de CNPJ com TTL de 24h.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-risk">Risco #3</span> Timeout não cancela a conexão TCP</div>
+    <p>O <code>AbortController</code> com timeout de 10s está corretamente implementado, mas ao chegar nesse timeout, o erro é tratado como <code>APIError</code> (502). Porém o response body pode continuar sendo streamado. Em ambientes Node.js com keep-alive, conexões zumbis podem acumular.</p>
+    <p><strong>Fix:</strong> Usar <code>undici</code> ou configurar <code>keepAlive: false</code> no fetch para garantir limpeza de conexão no timeout.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-risk">Risco #4</span> ValidCode lança exceção para CNAE 0</div>
+    <p>Em <code>BrasilAPICompany</code>, o CNAE code é construído como <code>new ValidCode(new DefaultCode(raw.cnae_fiscal || 0))</code>. <code>ValidCode.getValue()</code> verifica <code>if (!v) throw new Error("Code empty")</code>. Se <code>cnae_fiscal</code> vier da API como <code>0</code> ou <code>null</code>, o fallback é <code>0</code>, que é falsy — a instância do <code>BrasilAPICompany</code> lança exceção no construtor, e o erro vira um 500 genérico sem mensagem clara para o usuário.</p>
+    <p><strong>Fix:</strong> Usar <code>NullCode</code> como fallback em vez de <code>ValidCode</code>, ou verificar <code>v === 0 || v === null</code> explicitamente.</p>
+  </div>
+
+  <h3>🟠 Code Smells Prioritários</h3>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-smell">Smell #1</span> <code>any</code> em pontos críticos</div>
+    <p>Os tipos <code>any</code> aparecem em: <code>ICNPJRepository.findByCNPJ(): Promise&lt;any&gt;</code>, <code>BrasilAPICompany constructor(private raw: any)</code>, <code>CompanyService.generateInsights(raw: any)</code>, e no DTO <code>raw?: any</code>. Isso anula completamente a segurança de tipos nesses caminhos críticos.</p>
+    <p><strong>Fix:</strong> Criar interface <code>BrasilAPIRawResponse</code> com todos os campos da API tipados. Isso também revelaria o Bug #3 imediatamente.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-smell">Smell #2</span> Lógica de score triplicada</div>
+    <p>O cálculo de <code>ageYears</code> aparece literalmente copiado em 3 lugares: <code>enrich()</code>, <code>calculateScore()</code>, e <code>generateInsights()</code>. Qualquer mudança na fórmula precisa ser feita em 3 locais.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-smell">Smell #3</span> Breakdown incompleto no frontend</div>
+    <p>O objeto <code>breakdown</code> tem 5 dimensões (<code>isActive, contact, companyAge, size, cnae</code>), mas o <code>CompanyCard</code> só exibe 2 (<code>companyAge</code> e <code>contact</code>). As dimensões <code>isActive</code>, <code>size</code> e <code>cnae</code> são enviadas mas silenciosamente ignoradas.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-smell">Smell #4</span> CRLF em arquivos shared</div>
+    <p>Os arquivos <code>specification/index.ts</code> e <code>contactValidator.ts</code> usam terminações CRLF (<code>\r\n</code>) enquanto o resto do projeto usa LF. Indica inconsistência no setup do repositório (.gitattributes ausente) e pode causar problemas em CI/CD em ambientes Linux.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-smell">Smell #5</span> ICNPJRepository mal posicionado</div>
+    <p>A interface <code>ICNPJRepository</code> está definida dentro de <code>BrasilAPIRepository.ts</code>, junto com as classes de erro (<code>NotFoundError</code>, <code>APIError</code>). Interfaces deveriam estar em sua própria camada de abstração, não no arquivo de implementação. O service importa a interface do arquivo de repository, acoplando-se ao módulo.</p>
+  </div>
+
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ ARQUITETURA ══════════════════════════════════════ -->
+<section id="arch">
+<div class="container">
+
+  <h2>Arquitetura Atual vs. Ideal</h2>
+
+  <h3>Estrutura atual</h3>
+  <p>O projeto adota uma arquitetura em camadas razoável. A separação em <code>controller → service → repository</code> está presente. O diferencial é o domínio rico em <code>shared/types</code>.</p>
+
+  <div class="arch-layer">
+    <div class="arch-icon">🌐</div>
+    <div><div class="arch-name">HTTP Layer</div><div class="arch-desc">express + cors — mínimo necessário, correto</div></div>
+  </div>
+  <div class="arch-arrow">↓</div>
+  <div class="arch-layer">
+    <div class="arch-icon">🎮</div>
+    <div><div class="arch-name">CompanyController</div><div class="arch-desc">Valida input, mapeia erros para HTTP codes, delega ao service</div></div>
+  </div>
+  <div class="arch-arrow">↓</div>
+  <div class="arch-layer">
+    <div class="arch-icon">⚙️</div>
+    <div><div class="arch-name">CompanyService</div><div class="arch-desc">Orquestra enriquecimento, scoring e insights — <strong style="color:var(--warn)">gordo demais</strong></div></div>
+  </div>
+  <div class="arch-arrow">↓</div>
+  <div class="arch-layer">
+    <div class="arch-icon">📦</div>
+    <div><div class="arch-name">BrasilAPIRepository</div><div class="arch-desc">HTTP client para BrasilAPI — bem isolado, mas sem cache</div></div>
+  </div>
+  <div class="arch-arrow">↓</div>
+  <div class="arch-layer">
+    <div class="arch-icon">🏛</div>
+    <div><div class="arch-name">Shared Domain (shared/types)</div><div class="arch-desc">Value Objects, Decorators, Specifications, DTOs — <strong style="color:var(--success)">ponto forte</strong></div></div>
+  </div>
+
+  <h3>Problemas arquiteturais</h3>
+
+  <table>
+    <thead><tr><th>Problema</th><th>Impacto</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>CompanyService com múltiplas responsabilidades</td>
+        <td>Faz enriquecimento, scoring E geração de insights. Viola SRP. Dificulta testes unitários isolados.</td>
+      </tr>
+      <tr>
+        <td>Sem camada de cache</td>
+        <td>CNPJs consultados frequentemente pagam o custo de latência externa toda vez. CNPJ é dado público estável — ideal para cache longo.</td>
+      </tr>
+      <tr>
+        <td>scoreWeights.ts solto na raiz de src/</td>
+        <td>Configuração de domínio crítica (pesos do score) fora de qualquer camada. Deveria ser um serviço de configuração ou parte do domain.</td>
+      </tr>
+      <tr>
+        <td>Sem autenticação/multitenancy</td>
+        <td>Para virar SaaS, cada empresa precisa de contexto de tenant para histórico, cotas e billing.</td>
+      </tr>
+      <tr>
+        <td>Sem persistência</td>
+        <td>Cada busca é efêmera. Um CRM interno de leads consultados é feature básica para produto.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Arquitetura recomendada para escala</h3>
+
+  <div class="highlight">
+    A estrutura de domínio já está excelente. O esforço deve ser em extrair responsabilidades do <code>CompanyService</code>, adicionar cache e persistência, e introduzir autenticação. Não é uma reescrita — é uma evolução.
+  </div>
+
+  <pre><span class="cmt">// Estrutura de pastas recomendada para SaaS</span>
+src/
+├── domain/
+│   ├── company/       <span class="cmt">← mover shared/types aqui</span>
+│   ├── lead/          <span class="cmt">← novo: entidade Lead com histórico</span>
+│   └── scoring/       <span class="cmt">← extrair ScoreCalculator + InsightGenerator</span>
+├── application/
+│   ├── usecases/
+│   │   ├── EnrichLead.ts
+│   │   ├── GetLeadHistory.ts
+│   │   └── ExportLeads.ts
+│   └── ports/         <span class="cmt">← interfaces (ICNPJRepository, ILeadRepository, ICache)</span>
+├── infrastructure/
+│   ├── http/
+│   │   ├── BrasilAPIAdapter.ts
+│   │   └── ReceitaWSAdapter.ts    <span class="cmt">← segunda fonte de dados</span>
+│   ├── cache/
+│   │   └── RedisCache.ts
+│   ├── db/
+│   │   └── PostgresLeadRepository.ts
+│   └── auth/
+│       └── JWTMiddleware.ts
+└── presentation/
+    ├── controllers/
+    └── middlewares/</pre>
+
+  <h3>Score de pesos — análise crítica</h3>
+  <p>O modelo de scoring atual tem uma fragilidade conceitual: peso de 40% para <code>isActive</code> cria um "cliff" — empresa inativa vai direto para score ~30 independente de todos os outros fatores. Para a Letalk, que vende SaaS de comunicação, o segmento (CNAE) e o tamanho talvez sejam mais relevantes que a idade. Os pesos deveriam ser configuráveis por perfil de ICP (Ideal Customer Profile) do usuário.</p>
+
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ FRONTEND ══════════════════════════════════════ -->
+<section id="frontend">
+<div class="container">
+
+  <h2>Análise Frontend</h2>
+
+  <h3>O que funciona bem</h3>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title"><span class="tag tag-good">Bom</span> Custom hooks bem separados</div>
+      <p><code>useCNPJMask</code>, <code>useCNPJSearch</code>, <code>useViewMode</code> — cada um com responsabilidade única, sem efeitos colaterais cruzados.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag tag-good">Bom</span> Componentes domain vs UI</div>
+      <p>A separação entre <code>components/domain/</code> e <code>components/ui/</code> é excelente. <code>CNPJInput</code>, <code>ScoreIndicator</code>, <code>InsightBlock</code> são componentes de domínio ricos com lógica de apresentação relevante.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag tag-good">Bom</span> ScoreIndicator com RAF</div>
+      <p>A animação de contagem usando <code>requestAnimationFrame</code> com easing cúbico é implementação correta e performática. Evita setInterval e tem cleanup adequado.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="tag tag-good">Bom</span> ViewMode contextual</div>
+      <p>Três modos (simple, analytic, developer) mostram pensamento de produto. O mode <code>developer</code> ativado via query string <code>?dev=true</code> é uma abordagem elegante para debug em produção sem expor UI desnecessária.</p>
+    </div>
+  </div>
+
+  <h3>Problemas e melhorias</h3>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-bug">Bug</span> CNPJInput com dupla responsabilidade de state</div>
+    <p>O componente chama tanto <code>onChange</code> quanto <code>onValidCNPJ</code> — dois callbacks com semânticas diferentes. No <code>LeadForm</code>, ambos chamam <code>set("cnpj")</code>. Isso cria updates duplos de estado para o mesmo campo.</p>
+    <pre><span class="cmt">// LeadForm.tsx — dois handlers, mesmo resultado</span>
+&lt;CNPJInput
+  onChange={set("cnpj")}         <span class="cmt">// ← chamado em todo keystroke</span>
+  onValidCNPJ={(cnpj) => set("cnpj")(cnpj)}  <span class="cmt">// ← chamado quando válido</span>
+/&gt;</pre>
+    <p><strong>Fix:</strong> Manter apenas <code>onValidCNPJ</code> como API. O valor parcial não precisa subir para o formulário pai.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-smell">Smell</span> LeadContext criado mas não utilizado</div>
+    <p><code>LeadContext</code> é criado com <code>currentLead</code> e <code>setCurrentLead</code>, o <code>LeadProvider</code> wrappa o app, mas nenhum componente chama <code>useLead()</code>. O estado de lead vive em <code>useCNPJSearch()</code> no <code>SearchPage</code>. O context é infraestrutura morta.</p>
+    <p><strong>Fix:</strong> Ou usar o context para compartilhar o resultado entre componentes (remove prop drilling), ou remover o arquivo.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-smell">Smell</span> Breakddown mostra 2/5 dimensões</div>
+    <p>O backend calcula e retorna <code>{ isActive, contact, companyAge, size, cnae }</code> mas o CompanyCard define:</p>
+    <pre><span class="kw">const</span> breakdownItems = [
+  { label: <span class="str">"Tempo de mercado"</span>, value: data.breakdown.companyAge },
+  { label: <span class="str">"Qualidade do contato"</span>, value: data.breakdown.contact }
+  <span class="cmt">// isActive, size, cnae → ignorados</span>
+];</pre>
+    <p>O usuário não vê por que a empresa tem o score que tem. Isso quebra a promessa do produto de "insights acionáveis".</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-smell">Smell</span> Validação duplicada frontend/backend</div>
+    <p>O CNPJ é validado no <code>useCNPJMask</code> (frontend) usando <code>cnpjValidator.ts</code> local, E no backend usando <code>validateCNPJ</code> de <code>shared/types/domain</code>. O frontend usa um arquivo local em <code>services/cnpjValidator.ts</code> em vez de importar do shared. Se a lógica divergir, haverá falsos positivos/negativos.</p>
+    <p><strong>Fix:</strong> O frontend deve importar <code>validateCNPJ</code> diretamente de <code>shared/types/domain</code>.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-smell">Smell</span> useViewMode sem persistência</div>
+    <p><code>useViewMode</code> inicializa do query param mas não persiste mudanças. Se o usuário troca para "analytic" via UI, recarregar a página volta para "simple". Para produto, o modo deveria ser salvo em <code>localStorage</code> ou preferências de usuário.</p>
+  </div>
+
+  <h3>UX — sugestões de produto</h3>
+
+  <table>
+    <thead><tr><th>Oportunidade</th><th>Impacto</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Histórico de consultas locais</td>
+        <td>Salvar últimos 10 CNPJs consultados em localStorage com score. Reduz fricção para reabrir um lead.</td>
+      </tr>
+      <tr>
+        <td>Copiar dados formatados</td>
+        <td>Botão "Copiar para clipboard" com dados do lead no formato de nota de CRM. Feature muito requisitada por SDRs.</td>
+      </tr>
+      <tr>
+        <td>Comparar dois leads</td>
+        <td>Side-by-side de dois CNPJs para decisão de qual priorizar. Diferencial forte frente a ferramentas existentes.</td>
+      </tr>
+      <tr>
+        <td>Score explicado</td>
+        <td>Tooltip no score mostrando o breakdown completo com peso de cada dimensão. "Por que 73?"</td>
+      </tr>
+      <tr>
+        <td>Exportar para CSV/JSON</td>
+        <td>Resultado do enriquecimento exportável para colar em planilha ou CRM.</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ BACKEND ══════════════════════════════════════ -->
+<section id="backend">
+<div class="container">
+
+  <h2>Análise Backend</h2>
+
+  <h3>Tratamento de erros — avaliação</h3>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-good">Bom</span> Error hierarchy com classes customizadas</div>
+    <p><code>NotFoundError</code> e <code>APIError</code> extendem <code>Error</code> corretamente com <code>this.name</code> setado. O controller faz <code>instanceof</code> check antes de mapear para HTTP codes. Padrão correto.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-good">Bom</span> AbortController com timeout</div>
+    <p>O timeout de 10s com <code>AbortController</code> e <code>clearTimeout</code> no <code>finally</code> é implementação correta que evita memory leaks. O erro de abort é corretamente re-thrown como <code>APIError</code>.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-smell">Problema</span> catch genérico perde stack trace</div>
+    <pre><span class="cmt">// controller</span>
+<span class="kw">catch</span> (err: <span class="kw">any</span>) {
+  <span class="kw">if</span> (err <span class="kw">instanceof</span> NotFoundError) {...}
+  <span class="kw">if</span> (err <span class="kw">instanceof</span> APIError) {...}
+  res.status(<span class="num">500</span>).json({ error: <span class="str">"Erro interno"</span>, code: <span class="str">"INTERNAL_ERROR"</span> });
+  <span class="cmt">// ← err nunca é logado! Erro 500 desaparece em produção</span>
+}</pre>
+    <p><strong>Fix:</strong> Adicionar <code>console.error(err)</code> (ou logger estruturado) no catch do 500. Em produção, sem isso, erros inesperados são invisíveis.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-risk">Risco</span> Sem validação de corpo de request</div>
+    <p>O controller extrai <code>const { name, email, phone, cnpj } = req.body</code> sem validar o shape do body. Um request com <code>body: null</code> ou <code>body: "string"</code> causa crash silencioso com desestruturação para undefined, ou pode injetar valores inesperados.</p>
+    <p><strong>Fix:</strong> Usar <code>zod</code> ou <code>joi</code> para validação do body antes de processar:</p>
+    <pre><span class="kw">const</span> schema = z.object({
+  cnpj: z.string().min(<span class="num">14</span>),
+  name: z.string().optional(),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
+});
+<span class="kw">const</span> parsed = schema.safeParse(req.body);
+<span class="kw">if</span> (!parsed.success) <span class="kw">return</span> res.status(<span class="num">400</span>).json(...);</pre>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-risk">Risco</span> Sem logging estruturado</div>
+    <p>Todo o logging é via <code>console.log</code>. Em produção, não há como correlacionar requests, medir latência de chamadas externas, detectar padrões de erro, ou integrar com ferramentas de observabilidade (Datadog, Sentry, etc.).</p>
+    <p><strong>Fix:</strong> Adicionar <code>pino</code> (performático, JSON-first) com request ID gerado por middleware. Logar: início de request, resultado de chamada à BrasilAPI (duração, status), erros com stack.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="tag tag-risk">Risco</span> User-Agent spoofing</div>
+    <p>O repository envia headers de browser (<code>Mozilla/5.0 Windows NT 10.0...</code>) para a BrasilAPI. Isso é anti-pattern para uma API pública B2B — além de frágil (a BrasilAPI pode detectar), é enganoso. Para um produto real, identificar-se corretamente é melhor prática.</p>
+    <pre><span class="str">'User-Agent'</span>: <span class="str">'LeadIntel/1.0 (contato@leadintel.com)'</span></pre>
+  </div>
+
+  <h3>Sugestões de implementação para SaaS</h3>
+
+  <pre><span class="cmt">// Redis cache para CNPJ — exemplo de implementação</span>
+<span class="kw">class</span> CachedCNPJRepository <span class="kw">implements</span> ICNPJRepository {
+  constructor(
+    <span class="kw">private</span> repo: ICNPJRepository,
+    <span class="kw">private</span> cache: ICache,
+    <span class="kw">private</span> ttl = <span class="num">86400</span> <span class="cmt">// 24h — dados da RF não mudam com frequência</span>
+  ) {}
+
+  <span class="kw">async</span> findByCNPJ(cnpj: string): Promise&lt;BrasilAPIRawResponse&gt; {
+    <span class="kw">const</span> cached = <span class="kw">await</span> <span class="kw">this</span>.cache.get(<span class="str">`cnpj:${cnpj}`</span>);
+    <span class="kw">if</span> (cached) <span class="kw">return</span> JSON.parse(cached);
+
+    <span class="kw">const</span> data = <span class="kw">await</span> <span class="kw">this</span>.repo.findByCNPJ(cnpj);
+    <span class="kw">await</span> <span class="kw">this</span>.cache.set(<span class="str">`cnpj:${cnpj}`</span>, JSON.stringify(data), <span class="kw">this</span>.ttl);
+    <span class="kw">return</span> data;
+  }
+}
+
+<span class="cmt">// routes/index.ts — composição com cache</span>
+<span class="kw">const</span> redis = <span class="kw">new</span> RedisCache(process.env.REDIS_URL);
+<span class="kw">const</span> baseRepo = <span class="kw">new</span> BrasilAPIRepository();
+<span class="kw">const</span> repo = <span class="kw">new</span> CachedCNPJRepository(baseRepo, redis);
+<span class="kw">const</span> service = <span class="kw">new</span> CompanyService(repo);</pre>
+
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ SAAS ══════════════════════════════════════ -->
+<section id="saas">
+<div class="container">
+
+  <h2>Evolução para Produto SaaS</h2>
+
+  <h3>Proposta de valor revisada</h3>
+  <div class="highlight">
+    <strong>LeadIntel não é um "lookup de CNPJ".</strong> O diferencial real é transformar dados públicos em sinais de vendas acionáveis — especificamente para times de SDR/BDR que precisam decidir <em>em segundos</em> se um lead vale o esforço de outreach. O score + insights é o produto; o CNPJ é só o input.
+  </div>
+
+  <h3>Planos sugeridos</h3>
+  <div class="plans">
+    <div class="plan">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">R$ 0 <span>/ mês</span></div>
+      <div class="plan-feat">50 consultas/mês</div>
+      <div class="plan-feat">Score básico (3 dimensões)</div>
+      <div class="plan-feat">Insights genéricos</div>
+      <div class="plan-feat">Sem histórico</div>
+      <div class="plan-feat">Sem exportação</div>
+    </div>
+    <div class="plan featured">
+      <div class="plan-name">Pro ⭐</div>
+      <div class="plan-price">R$ 149 <span>/ mês</span></div>
+      <div class="plan-feat">1.000 consultas/mês</div>
+      <div class="plan-feat">Score completo + breakdown</div>
+      <div class="plan-feat">Histórico de leads consultados</div>
+      <div class="plan-feat">Exportação CSV/JSON</div>
+      <div class="plan-feat">ICP customizável (pesos)</div>
+      <div class="plan-feat">Integração webhook/Zapier</div>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Team</div>
+      <div class="plan-price">R$ 499 <span>/ mês</span></div>
+      <div class="plan-feat">Ilimitado</div>
+      <div class="plan-feat">Multi-usuário (5 seats)</div>
+      <div class="plan-feat">Pipeline compartilhado</div>
+      <div class="plan-feat">Integração CRM (Pipedrive, HubSpot)</div>
+      <div class="plan-feat">API própria com key</div>
+      <div class="plan-feat">White-label / embedável</div>
+    </div>
+  </div>
+
+  <h3>Enriquecimento de dados — próximas fontes</h3>
+
+  <table>
+    <thead><tr><th>Fonte</th><th>Dados</th><th>Viabilidade</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>ReceitaWS</td>
+        <td>Dados mais frescos que BrasilAPI, inclui quadro societário completo</td>
+        <td><span class="tag tag-good">Fácil</span></td>
+      </tr>
+      <tr>
+        <td>LinkedIn (scraping cuidadoso)</td>
+        <td>Headcount real, crescimento de equipe, perfil do fundador, tech stack declarado</td>
+        <td><span class="tag tag-smell">Médio</span></td>
+      </tr>
+      <tr>
+        <td>Similarweb / Semrush API</td>
+        <td>Tráfego do site da empresa — proxy de saúde do negócio digital</td>
+        <td><span class="tag tag-smell">Médio</span></td>
+      </tr>
+      <tr>
+        <td>Google Maps Places</td>
+        <td>Avaliações, presença online, horários de funcionamento — empresa ativa de fato</td>
+        <td><span class="tag tag-good">Fácil</span></td>
+      </tr>
+      <tr>
+        <td>Crunchbase API</td>
+        <td>Rodadas de investimento — sinal forte de empresa em crescimento/produto</td>
+        <td><span class="tag tag-risk">Caro</span></td>
+      </tr>
+      <tr>
+        <td>ReclameAqui (scraping)</td>
+        <td>Índice de reclamações — sinal de saúde do relacionamento com clientes</td>
+        <td><span class="tag tag-smell">Médio</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Diferenciais competitivos a construir</h3>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title"><span>🎯</span> ICP Score personalizado</div>
+      <p>Permitir que cada cliente configure seu Ideal Customer Profile — quais CNAEs, porte, região e tempo de empresa são mais valiosos para ele. O score se torna "quão próximo esse lead está do meu ICP".</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>📊</span> Sinais de timing</div>
+      <p>Detectar eventos que indicam momento de compra: empresa registrada há menos de 1 ano (fase de setup), mudança recente de endereço, aumento de CNAEs secundários (expansão), novo sócio (mudança de gestão).</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>🔗</span> Extensão de browser</div>
+      <p>Enriquecer leads diretamente no LinkedIn, RD Station ou Pipedrive sem sair da ferramenta. Reduz fricção zero para SDRs. Modelo de distribuição viral B2B comprovado.</p>
+    </div>
+    <div class="card">
+      <div class="card-title"><span>📥</span> Upload em lote</div>
+      <p>Receber CSV com lista de CNPJs e retornar todos enriquecidos. Caso de uso de times de marketing que segmentam base via CNPJ. CAC muito mais baixo que consulta manual.</td>
+    </div>
+  </div>
+
+</div>
+</section>
+
+<!-- ══════════════════════════════════════ ROADMAP ══════════════════════════════════════ -->
+<section id="roadmap">
+<div class="container">
+
+  <h2>Roadmap de Melhorias</h2>
+
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-dot short"></div>
+      <div class="tl-label short">Curto prazo — 1 a 2 semanas</div>
+      <div class="tl-title">Correções críticas e quick wins</div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="card-title">1. Remover o delay de 800ms</div>
+        <p class="tl-desc">Uma linha. Impacto imediato de 800ms de latência eliminados. <span class="tag tag-bug">Bug #2</span></p>
+      </div>
+      <div class="card">
+        <div class="card-title">2. Tipar BrasilAPIRawResponse</div>
+        <p class="tl-desc">Criar interface para o retorno da BrasilAPI. Vai revelar automaticamente o Bug #3 de chaves de SIZE_SCORES e eliminar os <code>any</code> críticos.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">3. Remover calculateScore() duplicado</div>
+        <p class="tl-desc">Extrair para <code>ScoreCalculator</code> separado. Remove dead code e consolida a lógica em um lugar.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">4. Remover raw do DTO/response</div>
+        <p class="tl-desc">Não expor dados internos da API no response HTTP. Segurança básica.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">5. Exibir breakdown completo no frontend</div>
+        <p class="tl-desc">Mostrar as 5 dimensões no CompanyCard. 10 linhas de código, melhora muito a transparência do score para o usuário.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">6. Adicionar logging no catch de 500</div>
+        <p class="tl-desc"><code>console.error(err)</code> no catch genérico do controller. Sem isso, erros de produção são invisíveis.</p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot mid"></div>
+      <div class="tl-label mid">Médio prazo — 1 a 2 meses</div>
+      <div class="tl-title">Produto funcional e escalável</div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="card-title">7. Cache de CNPJs com Redis/Upstash</div>
+        <p class="tl-desc">TTL de 24h. Latência cai de ~1.5s para ~50ms nos hits. Essencial para qualquer volume de uso.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">8. Autenticação JWT + multitenancy</div>
+        <p class="tl-desc">Fundação do SaaS. Sem isso não há billing, cotas, histórico por usuário ou personalização.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">9. Persistência de leads consultados</div>
+        <p class="tl-desc">PostgreSQL com tabela de consultas por usuário. Histórico, ranking dos leads mais quentes, re-consulta sem custo.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">10. Rate limiting por usuário</div>
+        <p class="tl-desc"><code>express-rate-limit</code> por IP e por token JWT. Cotas por plano. Previne abuso e cria pressão de upgrade.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">11. Testes unitários do domínio</div>
+        <p class="tl-desc">O domínio rico (value objects, decorators, specifications) é facilmente testável. Cobrir <code>validateCNPJ</code>, <code>WeightedLeadScore</code>, <code>contactValidator</code>, <code>ScoreCalculator</code>. Vitest + cobertura &gt;80%.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">12. Validação de body com Zod</div>
+        <p class="tl-desc">Schema validation no controller. Retorna erros descritivos em vez de crashes.</p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot long"></div>
+      <div class="tl-label long">Longo prazo — 3 a 6 meses</div>
+      <div class="tl-title">Produto diferenciado e escalável</div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="card-title">13. ICP Score configurável por usuário</div>
+        <p class="tl-desc">Interface para configurar pesos e filtros do score. Transforma o produto de genérico para personalizado — e justifica ticket mais alto.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">14. Segunda fonte de dados (ReceitaWS)</div>
+        <p class="tl-desc">Fallback automático quando BrasilAPI falha. Dados complementares como quadro societário completo. Aumenta resiliência e profundidade.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">15. Extensão Chrome</div>
+        <p class="tl-desc">Enriquecimento inline no LinkedIn. Principal canal de distribuição viral B2B. Requer autenticação via extension + backend de sync.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">16. Upload em lote + processamento assíncrono</div>
+        <p class="tl-desc">CSV upload → fila (BullMQ + Redis) → webhook/email quando pronto. Abre segmento de marketing operations e operações de prospecção em escala.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">17. API pública + documentação Swagger</div>
+        <p class="tl-desc">Permitir que clientes integrem o enriquecimento em seus próprios sistemas. Abre canal de revenue via API usage + churn muito menor (embedded).</p>
+      </div>
+    </div>
+
+  </div>
+
+  <hr>
+  <div class="highlight" style="margin-top:24px">
+    <strong>Conclusão:</strong> Este é um projeto genuinamente acima da média para um teste técnico. O uso de Decorator Pattern, Specification Pattern, domain objects ricos e uma UI com atenção a detalhes de interação demonstra maturidade. Os gaps existem principalmente em segurança, testabilidade e alguns bugs silenciosos — não em arquitetura fundamentalmente errada. Com as correções de curto prazo e a evolução de médio prazo, esta base já suportaria um produto SaaS funcional.
+  </div>
+
+</div>
+</section>
+
+<script>
+  function show(id, btn) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // Animate bars on load
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(el => {
+      const w = el.style.width;
+      el.style.width = '0';
+      setTimeout(() => { el.style.width = w; }, 100);
+    });
+  }, 200);
+</script>
+</body>
+</html>
