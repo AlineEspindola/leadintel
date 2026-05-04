@@ -11,8 +11,6 @@ export class BrasilAPIRepository implements ICNPJRepository {
     const timeout = setTimeout(() => controller.abort(), 10000);
 
     try {
-      await new Promise((r) => setTimeout(r, 800));
-
       const res = await fetch(`${this.BASE_URL}/${clean}`, {
         signal: controller.signal,
         headers: {

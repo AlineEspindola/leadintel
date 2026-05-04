@@ -8,9 +8,7 @@ import {
   CompanyResponseDTO,
   InsightDTO,
 } from "../../../shared/types/dto";
-import {
-  validateContact,
-} from "../../../shared/types/utils/contactValidator";
+import { validateContact } from "../../../shared/types/utils/contactValidator";
 import {
   BrasilAPICompany,
   ScoredCompany,
@@ -144,6 +142,10 @@ export class CompanyService implements ICompanyService {
     return map[key] ?? "Não informado";
   }
 
+  /**
+   * @deprecated Use o cálculo direto em `enrich()` com WeightedLeadScore.
+   * Este método será removido em futuras versões.
+   */
   private calculateScore(company: BrasilAPICompany, raw: any): number {
     const isActive = company.getStatus().isActive();
 
