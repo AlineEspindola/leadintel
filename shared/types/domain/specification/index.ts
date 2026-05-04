@@ -8,15 +8,20 @@ export interface Specification<T> {
   not(): Specification<T>;
 }
 
-abstract class AbstractSpecification<T> implements Specification<T> {
+export abstract class AbstractSpecification<T>
+  implements Specification<T>
+{
   abstract isSatisfiedBy(candidate: T): boolean;
-  and(other: Specification<T>) {
+
+  and(other: Specification<T>): Specification<T> {
     return new AndSpecification(this, other);
   }
-  or(other: Specification<T>) {
+
+  or(other: Specification<T>): Specification<T> {
     return new OrSpecification(this, other);
   }
-  not() {
+
+  not(): Specification<T> {
     return new NotSpecification(this);
   }
 }
