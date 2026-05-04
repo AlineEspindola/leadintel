@@ -28,12 +28,14 @@ cd ../frontend && npm install
 ## Variáveis de ambiente
 
 ### Backend (`backend/.env`)
+
 ```env
 PORT=3001
 FRONTEND_URL=http://localhost:5173
 ```
 
 ### Frontend (`frontend/.env`)
+
 ```env
 VITE_API_URL=http://localhost:3001/api
 ```

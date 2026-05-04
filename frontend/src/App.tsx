@@ -1,10 +1,10 @@
-import { LeadProvider } from './contexts/LeadContext'
-import { Header } from './components/layout/Header/Header'
-import { SearchPage } from './pages/SearchPage'
-import { useViewMode } from './hooks/useViewMode'
+import { LeadProvider } from "./contexts/LeadContext";
+import { Header } from "./components/layout/Header/Header";
+import { SearchPage } from "./pages/SearchPage";
+import { useViewMode } from "./hooks/useViewMode";
 
 export default function App() {
-  const [viewMode, setViewMode] = useViewMode()
+  const [viewMode, setViewMode] = useViewMode();
 
   return (
     <LeadProvider>
@@ -13,5 +13,5 @@ export default function App() {
         <SearchPage viewMode={viewMode} />
       </div>
     </LeadProvider>
-  )
+  );
 }

@@ -50,7 +50,6 @@ export function CompanyCard({ data, viewMode }: Props) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 animate-slide-up">
-
       {/* SCORE */}
       <div className="bg-surface-raised border border-surface-border rounded-lg p-6 flex flex-col items-center">
         <ScoreIndicator
@@ -75,18 +74,24 @@ export function CompanyCard({ data, viewMode }: Props) {
           </h2>
 
           {data.fantasyName && data.fantasyName !== data.legalName && (
-            <p className="text-xs text-neutral-500 mt-0.5">
-              {data.legalName}
-            </p>
+            <p className="text-xs text-neutral-500 mt-0.5">{data.legalName}</p>
           )}
         </div>
 
         <div>
-          <MetaRow icon="📍" label="Localização" value={`${data.city}, ${data.state}`} />
+          <MetaRow
+            icon="📍"
+            label="Localização"
+            value={`${data.city}, ${data.state}`}
+          />
           <MetaRow icon="🏢" label="Porte" value={data.size} />
           <MetaRow icon="📅" label="Fundada" value={data.openedAt} />
           <MetaRow icon="📞" label="Telefone" value={data.phone || "—"} />
-          <MetaRow icon="👤" label="Sócio principal" value={`${data.mainPartnerName} — ${data.mainPartnerRole}`} />
+          <MetaRow
+            icon="👤"
+            label="Sócio principal"
+            value={`${data.mainPartnerName} — ${data.mainPartnerRole}`}
+          />
         </div>
 
         {viewMode !== "simple" && (
@@ -96,8 +101,16 @@ export function CompanyCard({ data, viewMode }: Props) {
             </p>
 
             <MetaRow icon="🔢" label="CNPJ" value={data.cnpj} />
-            <MetaRow icon="📋" label="Natureza jurídica" value={data.legalNature} />
-            <MetaRow icon="🗺" label="Endereço" value={`${data.address}, ${data.neighborhood}`} />
+            <MetaRow
+              icon="📋"
+              label="Natureza jurídica"
+              value={data.legalNature}
+            />
+            <MetaRow
+              icon="🗺"
+              label="Endereço"
+              value={`${data.address}, ${data.neighborhood}`}
+            />
             <MetaRow icon="📮" label="CEP" value={data.zipCode} />
           </div>
         )}
@@ -122,13 +135,9 @@ export function CompanyCard({ data, viewMode }: Props) {
                     key={item.label}
                     className="flex items-center justify-between text-xs"
                   >
-                    <span className="text-neutral-400">
-                      {item.label}
-                    </span>
+                    <span className="text-neutral-400">{item.label}</span>
 
-                    <span className={formatted.color}>
-                      {formatted.text}
-                    </span>
+                    <span className={formatted.color}>{formatted.text}</span>
                   </div>
                 );
               })}

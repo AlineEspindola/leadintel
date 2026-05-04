@@ -1,2 +1,2 @@
-export * from '@shared/types/dto'
-export * from '@shared/types/domain'
+export * from "@shared/types/dto";
+export * from "@shared/types/domain";

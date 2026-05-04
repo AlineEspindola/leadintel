@@ -126,7 +126,7 @@ export class CompanyService implements ICompanyService {
     const map: Record<string, string> = {
       "MICRO EMPRESA": "Microempresa",
       "EMPRESA DE PEQUENO PORTE": "Pequena empresa",
-      "DEMAIS": "Média/Grande empresa",
+      DEMAIS: "Média/Grande empresa",
     };
 
     return map[key] ?? "Não informado";
